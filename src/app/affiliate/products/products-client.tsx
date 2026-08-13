@@ -19,11 +19,12 @@ import {
 } from "@/services/product.service";
 
 function sourceLabel(
-  source: ProductResearchSource | null,
-  labels: { resultAi: string; resultSoco: string; resultDb: string },
+  source: ProductResearchSource | null | undefined,
+  labels: { resultAi: string; resultSoco: string; resultDb: string; resultMixed: string },
 ) {
   if (source === "ai_research") return labels.resultAi;
   if (source === "soco") return labels.resultSoco;
+  if (source === "mixed") return labels.resultMixed;
   return labels.resultDb;
 }
 
@@ -103,6 +104,7 @@ export function AffiliateProductsClient() {
     resultAi: ui.resultAi,
     resultSoco: ui.resultSoco,
     resultDb: ui.resultDb,
+    resultMixed: ui.resultMixed,
   };
   const categoryLabels = {
     catFaceSerum: ui.catFaceSerum,
@@ -411,7 +413,10 @@ export function AffiliateProductsClient() {
                               ) : (
                                 <Badge>
                                   {researchHits
-                                    ? sourceLabel(researchSource, sourceLabels)
+                                    ? sourceLabel(
+                                        product.origin ?? researchSource,
+                                        sourceLabels,
+                                      )
                                     : ui.database}
                                 </Badge>
                               )}
@@ -563,7 +568,9 @@ export function AffiliateProductsClient() {
                               </span>
                             ) : null}
                           </span>
-                          <Badge>{sourceLabel(lookupSource, sourceLabels)}</Badge>
+                          <Badge>
+                            {sourceLabel(product.origin ?? lookupSource, sourceLabels)}
+                          </Badge>
                         </button>
                       </li>
                     );

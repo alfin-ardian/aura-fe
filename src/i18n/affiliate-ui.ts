@@ -36,6 +36,7 @@ type AffiliateUi = {
     resultAi: string;
     resultSoco: string;
     resultDb: string;
+    resultMixed: string;
     modalAdd: string;
     modalEdit: string;
     cancel: string;
@@ -289,6 +290,7 @@ const en: AffiliateUi = {
     resultAi: "AI research",
     resultSoco: "SOCO",
     resultDb: "database",
+    resultMixed: "database + SOCO",
     modalAdd: "Add product",
     modalEdit: "Edit product",
     cancel: "Cancel",
@@ -550,6 +552,7 @@ const id: AffiliateUi = {
     resultAi: "riset AI",
     resultSoco: "SOCO",
     resultDb: "database",
+    resultMixed: "database + SOCO",
     modalAdd: "Tambah produk",
     modalEdit: "Edit produk",
     cancel: "Batal",
@@ -812,6 +815,7 @@ const ko: AffiliateUi = {
     resultAi: "AI 리서치",
     resultSoco: "SOCO",
     resultDb: "데이터베이스",
+    resultMixed: "데이터베이스 + SOCO",
     modalAdd: "제품 추가",
     modalEdit: "제품 수정",
     cancel: "취소",

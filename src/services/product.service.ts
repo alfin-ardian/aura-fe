@@ -23,9 +23,10 @@ export interface CatalogProduct {
   isActive: boolean;
   ownerId: string | null;
   owned: boolean;
+  origin?: Exclude<ProductResearchSource, "mixed">;
 }
 
-export type ProductResearchSource = "database" | "soco" | "ai_research";
+export type ProductResearchSource = "database" | "soco" | "ai_research" | "mixed";
 
 export interface ProductResearchResult {
   source: ProductResearchSource;
