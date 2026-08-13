@@ -25,22 +25,23 @@ export default function DocsPage() {
   const [jump, setJump] = useState("");
 
   const sections = useMemo(
-    () =>
-      [
-        { id: "intro" as const, label: ui.sections.intro, group: ui.groups.introduction },
-        {
-          id: "whitelabel" as const,
-          label: ui.sections.whitelabel,
-          group: ui.groups.introduction,
-        },
-        { id: "auth" as const, label: ui.sections.auth, group: ui.groups.gettingStarted },
-        { id: "keys" as const, label: ui.sections.keys, group: ui.groups.gettingStarted },
-        { id: "analyze" as const, label: ui.sections.analyze, group: ui.groups.aiService },
-        { id: "me" as const, label: ui.sections.me, group: ui.groups.aiService },
-        { id: "errors" as const, label: ui.sections.errors, group: ui.groups.reference },
-      ] as const,
+    () => [
+      { id: "intro" as const, label: ui.sections.intro, group: ui.groups.introduction },
+      {
+        id: "whitelabel" as const,
+        label: ui.sections.whitelabel,
+        group: ui.groups.introduction,
+      },
+      { id: "auth" as const, label: ui.sections.auth, group: ui.groups.gettingStarted },
+      { id: "keys" as const, label: ui.sections.keys, group: ui.groups.gettingStarted },
+      { id: "analyze" as const, label: ui.sections.analyze, group: ui.groups.aiService },
+      { id: "me" as const, label: ui.sections.me, group: ui.groups.aiService },
+      { id: "errors" as const, label: ui.sections.errors, group: ui.groups.reference },
+    ],
     [ui],
   );
+
+  type DocNavItem = (typeof sections)[number];
 
   const filtered = useMemo(() => {
     const q = jump.trim().toLowerCase();
@@ -54,7 +55,7 @@ export default function DocsPage() {
   }, [jump, sections]);
 
   const groups = useMemo(() => {
-    const map = new Map<string, typeof sections>();
+    const map = new Map<string, DocNavItem[]>();
     for (const item of filtered) {
       const list = map.get(item.group) ?? [];
       list.push(item);
