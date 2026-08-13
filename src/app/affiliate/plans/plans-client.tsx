@@ -97,7 +97,7 @@ export function PlansClient() {
               <Link
                 href={`/affiliate/checkout?plan=${plan.id}`}
                 className={cn(
-                  buttonVariants({ variant: plan.featured ? "default" : "secondary" }),
+                  buttonVariants({ variant: plan.featured ? "primary" : "secondary" }),
                   "w-full justify-center rounded-full",
                 )}
               >
