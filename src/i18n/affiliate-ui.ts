@@ -351,7 +351,7 @@ const en: AffiliateUi = {
     loading: "Loading billing...",
     errorTitle: "Billing not connected",
     errorDescription:
-      "Billing API is unavailable. Make sure the backend is running on localhost:3000.",
+      "Billing API is unavailable. Check that https://api.auraai.site is reachable and you are logged in.",
     promoTitle: "Save 20% with annual billing",
     promoBody:
       "Pay once a year for Growth or Scale and save up to 20%.",
@@ -387,7 +387,7 @@ const en: AffiliateUi = {
     loading: "Loading invoices...",
     errorTitle: "Invoices not connected",
     errorDescription:
-      "Invoices API is unavailable. Make sure the backend is running on localhost:3000.",
+      "Invoices API is unavailable. Check that https://api.auraai.site is reachable and you are logged in.",
     allInvoices: "All invoices",
     empty: "No invoices yet. After checkout, invoices will appear here.",
     colNumber: "Number",
@@ -423,7 +423,7 @@ const en: AffiliateUi = {
     loading: "Loading spending...",
     errorTitle: "Spending not connected",
     errorDescription:
-      "Spending API is unavailable. Make sure the backend is running on localhost:3000.",
+      "Spending API is unavailable. Check that https://api.auraai.site is reachable and you are logged in.",
     monthToDate: "Month to date",
     projectedMonth: "Projected month",
     averageMonth: "Average / month",
@@ -447,7 +447,7 @@ const en: AffiliateUi = {
     loading: "Loading quota stats...",
     errorTitle: "Usage not connected",
     errorDescription:
-      "Quota API is unavailable. Make sure the backend is running on localhost:3000.",
+      "Quota API is unavailable. Check that https://api.auraai.site is reachable and you are logged in.",
     activePlan: "Active plan",
     used: "Used",
     period: "Period {period}",
@@ -488,7 +488,7 @@ const en: AffiliateUi = {
     loading: "Loading analytics...",
     errorTitle: "Analytics not connected",
     errorDescription:
-      "Analytics API is unavailable. Make sure the backend is running on localhost:3000.",
+      "Analytics API is unavailable. Check that https://api.auraai.site is reachable and you are logged in.",
     dailyActivity: "Daily activity",
     weeklyActivity: "Weekly activity",
     monthlyActivity: "Monthly activity",
@@ -613,7 +613,7 @@ const id: AffiliateUi = {
     loading: "Memuat billing...",
     errorTitle: "Billing belum terhubung",
     errorDescription:
-      "API billing belum bisa diakses. Pastikan backend berjalan di localhost:3000.",
+      "API billing belum bisa diakses. Pastikan https://api.auraai.site dapat diakses dan Anda sudah login.",
     promoTitle: "Hemat 20% dengan billing tahunan",
     promoBody:
       "Bayar sekali setahun untuk paket Growth atau Scale dan hemat hingga 20%.",
@@ -649,7 +649,7 @@ const id: AffiliateUi = {
     loading: "Memuat invoices...",
     errorTitle: "Invoices belum terhubung",
     errorDescription:
-      "API invoices belum bisa diakses. Pastikan backend berjalan di localhost:3000.",
+      "API invoices belum bisa diakses. Pastikan https://api.auraai.site dapat diakses dan Anda sudah login.",
     allInvoices: "Semua invoice",
     empty: "Belum ada invoice. Setelah checkout, invoice akan muncul di sini.",
     colNumber: "Nomor",
@@ -685,7 +685,7 @@ const id: AffiliateUi = {
     loading: "Memuat spending...",
     errorTitle: "Spending belum terhubung",
     errorDescription:
-      "API spending belum bisa diakses. Pastikan backend berjalan di localhost:3000.",
+      "API spending belum bisa diakses. Pastikan https://api.auraai.site dapat diakses dan Anda sudah login.",
     monthToDate: "Bulan berjalan",
     projectedMonth: "Proyeksi bulan ini",
     averageMonth: "Rata-rata / bulan",
@@ -710,7 +710,7 @@ const id: AffiliateUi = {
     loading: "Memuat statistik kuota...",
     errorTitle: "Usage belum terhubung",
     errorDescription:
-      "API kuota belum bisa diakses. Pastikan backend berjalan di localhost:3000.",
+      "API kuota belum bisa diakses. Pastikan https://api.auraai.site dapat diakses dan Anda sudah login.",
     activePlan: "Paket aktif",
     used: "Terpakai",
     period: "Periode {period}",
@@ -751,7 +751,7 @@ const id: AffiliateUi = {
     loading: "Memuat analytics...",
     errorTitle: "Analytics belum terhubung",
     errorDescription:
-      "API analytics belum bisa diakses. Pastikan backend berjalan di localhost:3000.",
+      "API analytics belum bisa diakses. Pastikan https://api.auraai.site dapat diakses dan Anda sudah login.",
     dailyActivity: "Aktivitas harian",
     weeklyActivity: "Aktivitas mingguan",
     monthlyActivity: "Aktivitas bulanan",
@@ -874,7 +874,7 @@ const ko: AffiliateUi = {
     loading: "결제 정보 불러오는 중...",
     errorTitle: "결제를 연결할 수 없습니다",
     errorDescription:
-      "결제 API에 접근할 수 없습니다. 백엔드가 localhost:3000에서 실행 중인지 확인하세요.",
+      "결제 API에 접근할 수 없습니다. https://api.auraai.site 에 연결할 수 있는지, 로그인 상태인지 확인하세요.",
     promoTitle: "연간 결제로 20% 절약",
     promoBody:
       "Growth 또는 Scale 플랜을 연간으로 결제하면 최대 20%를 절약할 수 있습니다.",
@@ -910,7 +910,7 @@ const ko: AffiliateUi = {
     loading: "청구서 불러오는 중...",
     errorTitle: "청구서를 연결할 수 없습니다",
     errorDescription:
-      "청구서 API에 접근할 수 없습니다. 백엔드가 localhost:3000에서 실행 중인지 확인하세요.",
+      "청구서 API에 접근할 수 없습니다. https://api.auraai.site 에 연결할 수 있는지, 로그인 상태인지 확인하세요.",
     allInvoices: "전체 청구서",
     empty: "청구서가 없습니다. 결제 후 여기에 표시됩니다.",
     colNumber: "번호",
@@ -946,7 +946,7 @@ const ko: AffiliateUi = {
     loading: "지출 불러오는 중...",
     errorTitle: "지출을 연결할 수 없습니다",
     errorDescription:
-      "지출 API에 접근할 수 없습니다. 백엔드가 localhost:3000에서 실행 중인지 확인하세요.",
+      "지출 API에 접근할 수 없습니다. https://api.auraai.site 에 연결할 수 있는지, 로그인 상태인지 확인하세요.",
     monthToDate: "이번 달 누적",
     projectedMonth: "이번 달 예상",
     averageMonth: "월평균",
@@ -970,7 +970,7 @@ const ko: AffiliateUi = {
     loading: "할당량 통계 불러오는 중...",
     errorTitle: "사용량을 연결할 수 없습니다",
     errorDescription:
-      "할당량 API에 접근할 수 없습니다. 백엔드가 localhost:3000에서 실행 중인지 확인하세요.",
+      "할당량 API에 접근할 수 없습니다. https://api.auraai.site 에 연결할 수 있는지, 로그인 상태인지 확인하세요.",
     activePlan: "활성 플랜",
     used: "사용량",
     period: "기간 {period}",
@@ -1011,7 +1011,7 @@ const ko: AffiliateUi = {
     loading: "분석 불러오는 중...",
     errorTitle: "분석을 연결할 수 없습니다",
     errorDescription:
-      "분석 API에 접근할 수 없습니다. 백엔드가 localhost:3000에서 실행 중인지 확인하세요.",
+      "분석 API에 접근할 수 없습니다. https://api.auraai.site 에 연결할 수 있는지, 로그인 상태인지 확인하세요.",
     dailyActivity: "일별 활동",
     weeklyActivity: "주간 활동",
     monthlyActivity: "월간 활동",

@@ -9,6 +9,7 @@ import { ErrorState } from "@/components/ui/error-state";
 import { KpiGrid } from "@/components/ui/kpi-grid";
 import { SimpleBarChart } from "@/components/ui/simple-bar-chart";
 import { useLocale } from "@/i18n/locale-provider";
+import { API_URL } from "@/lib/api-url";
 import { getStoredUser } from "@/lib/auth-storage";
 import type { KpiCard, TrendPoint } from "@/types";
 import { authService } from "@/services/auth.service";
@@ -41,33 +42,42 @@ export function AffiliateOverviewClient() {
   const [referralLink, setReferralLink] = useState("");
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const load = useCallback(async () => {
-    const data = await analyticsService.getOverview();
-    setOverview(data);
-    if (data.affiliatorId) {
-      setReferralLink(buildPublicScanLink(data.affiliatorId));
+  const bootstrap = useCallback(async () => {
+    setErrorMessage(null);
+    setOverview(null);
+    const ok = await authService.ensureAffiliateApiSession();
+    setReady(ok);
+    if (!ok) {
+      setErrorMessage(
+        `Sesi API tidak valid. Login ulang, pastikan API ${API_URL} dapat dijangkau.`,
+      );
+      toast.error("Sesi habis. Silakan login ulang sebagai Affiliate.");
+      return;
+    }
+    const stored = getStoredUser();
+    if (stored?.id) setReferralLink(buildPublicScanLink(stored.id));
+    try {
+      const data = await analyticsService.getOverview();
+      setOverview(data);
+      if (data.affiliatorId) {
+        setReferralLink(buildPublicScanLink(data.affiliatorId));
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Gagal memuat overview";
+      setErrorMessage(`${message} (API: ${API_URL})`);
+      toast.error(message);
     }
   }, []);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const ok = await authService.ensureAffiliateApiSession();
-      if (cancelled) return;
-      setReady(ok);
-      if (!ok) {
-        setLoading(false);
-        toast.error("Backend belum terhubung. Jalankan API lalu login ulang sebagai Affiliate.");
-        return;
-      }
-      const stored = getStoredUser();
-      if (stored?.id) setReferralLink(buildPublicScanLink(stored.id));
       try {
-        await load();
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Gagal memuat overview");
+        await bootstrap();
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -75,7 +85,7 @@ export function AffiliateOverviewClient() {
     return () => {
       cancelled = true;
     };
-  }, [load]);
+  }, [bootstrap]);
 
   const kpis: KpiCard[] = useMemo(() => {
     if (!overview) return [];
@@ -166,10 +176,13 @@ export function AffiliateOverviewClient() {
     return (
       <ErrorState
         title="Overview belum terhubung"
-        description="API analytics belum bisa diakses. Pastikan backend berjalan di localhost:3000."
+        description={
+          errorMessage ??
+          `API analytics belum bisa diakses. Periksa koneksi ke ${API_URL}.`
+        }
         onRetry={() => {
           setLoading(true);
-          void load().finally(() => setLoading(false));
+          void bootstrap().finally(() => setLoading(false));
         }}
       />
     );
