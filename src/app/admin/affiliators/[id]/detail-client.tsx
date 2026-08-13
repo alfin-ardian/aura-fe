@@ -39,6 +39,10 @@ type TabId =
   | "invoices"
   | "earnings";
 
+const PRODUCTS_PAGE_SIZE = 10;
+const LEADS_PAGE_SIZE = 10;
+const INVOICES_PAGE_SIZE = 10;
+
 export function AdminAffiliatorDetailClient() {
   const params = useParams<{ id: string }>();
   const id = params.id;
@@ -49,6 +53,9 @@ export function AdminAffiliatorDetailClient() {
   const [loading, setLoading] = useState(true);
   const [ready, setReady] = useState(false);
   const [tab, setTab] = useState<TabId>("info");
+  const [productsPage, setProductsPage] = useState(1);
+  const [leadsPage, setLeadsPage] = useState(1);
+  const [invoicesPage, setInvoicesPage] = useState(1);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceDetail | null>(
     null,
@@ -110,6 +117,9 @@ export function AdminAffiliatorDetailClient() {
           earningsTrend: "월별 수익",
           totalEarnings: "총 수익",
           guest: "게스트",
+          prev: "이전",
+          next: "다음",
+          pagination: "{total}개 · {page}/{pageCount}페이지",
         }
       : locale === "en"
         ? {
@@ -166,6 +176,9 @@ export function AdminAffiliatorDetailClient() {
             earningsTrend: "Monthly earnings",
             totalEarnings: "Total earnings",
             guest: "Guest",
+            prev: "Previous",
+            next: "Next",
+            pagination: "{total} items · page {page}/{pageCount}",
           }
         : {
             back: "Kembali ke daftar",
@@ -221,6 +234,9 @@ export function AdminAffiliatorDetailClient() {
             earningsTrend: "Pendapatan bulanan",
             totalEarnings: "Total pendapatan",
             guest: "Tamu",
+            prev: "Sebelumnya",
+            next: "Berikutnya",
+            pagination: "{total} item · halaman {page}/{pageCount}",
           };
 
   const tabs: Array<{ id: TabId; label: string }> = [
@@ -308,6 +324,40 @@ export function AdminAffiliatorDetailClient() {
   const displayName = account.name?.trim() || account.email.split("@")[0];
   const maxTotal = Math.max(...chartData.map((item) => item.total), 1);
 
+  const productsPageCount = Math.max(
+    1,
+    Math.ceil(data.products.length / PRODUCTS_PAGE_SIZE),
+  );
+  const safeProductsPage = Math.min(productsPage, productsPageCount);
+  const pagedProducts = data.products.slice(
+    (safeProductsPage - 1) * PRODUCTS_PAGE_SIZE,
+    safeProductsPage * PRODUCTS_PAGE_SIZE,
+  );
+
+  const leadsPageCount = Math.max(1, Math.ceil(data.leads.length / LEADS_PAGE_SIZE));
+  const safeLeadsPage = Math.min(leadsPage, leadsPageCount);
+  const pagedLeads = data.leads.slice(
+    (safeLeadsPage - 1) * LEADS_PAGE_SIZE,
+    safeLeadsPage * LEADS_PAGE_SIZE,
+  );
+
+  const invoicesPageCount = Math.max(
+    1,
+    Math.ceil(data.invoices.length / INVOICES_PAGE_SIZE),
+  );
+  const safeInvoicesPage = Math.min(invoicesPage, invoicesPageCount);
+  const pagedInvoices = data.invoices.slice(
+    (safeInvoicesPage - 1) * INVOICES_PAGE_SIZE,
+    safeInvoicesPage * INVOICES_PAGE_SIZE,
+  );
+
+  const switchTab = (next: TabId) => {
+    setTab(next);
+    if (next === "products") setProductsPage(1);
+    if (next === "leads") setLeadsPage(1);
+    if (next === "invoices") setInvoicesPage(1);
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -362,7 +412,7 @@ export function AdminAffiliatorDetailClient() {
           <button
             key={item.id}
             type="button"
-            onClick={() => setTab(item.id)}
+            onClick={() => switchTab(item.id)}
             className={cn(
               "rounded-full px-3 py-1.5 text-xs font-medium transition",
               tab === item.id
@@ -432,46 +482,64 @@ export function AdminAffiliatorDetailClient() {
               {t.emptyProducts}
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px] text-left text-sm">
-                <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
-                  <tr>
-                    <th className="px-5 py-3 font-medium">{t.colProduct}</th>
-                    <th className="px-5 py-3 font-medium">{t.colBrand}</th>
-                    <th className="px-5 py-3 font-medium">{t.colCategory}</th>
-                    <th className="px-5 py-3 font-medium">{t.colStatus}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.products.map((product) => (
-                    <tr
-                      key={product.id}
-                      className="border-t border-neutral-200 dark:border-neutral-800"
-                    >
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-3">
-                          <ProductThumb src={product.imageUrl} alt={product.name} />
-                          <span className="min-w-0 truncate font-medium dark:text-white">
-                            {product.name}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
-                        {product.brand}
-                      </td>
-                      <td className="px-5 py-3">
-                        <Badge>{product.subcategory || product.category}</Badge>
-                      </td>
-                      <td className="px-5 py-3">
-                        <Badge variant={product.isActive ? "success" : "default"}>
-                          {product.isActive ? t.active : t.inactive}
-                        </Badge>
-                      </td>
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[640px] text-left text-sm">
+                  <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
+                    <tr>
+                      <th className="px-5 py-3 font-medium">{t.colProduct}</th>
+                      <th className="px-5 py-3 font-medium">{t.colBrand}</th>
+                      <th className="px-5 py-3 font-medium">{t.colCategory}</th>
+                      <th className="px-5 py-3 font-medium">{t.colStatus}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {pagedProducts.map((product) => (
+                      <tr
+                        key={product.id}
+                        className="border-t border-neutral-200 dark:border-neutral-800"
+                      >
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-3">
+                            <ProductThumb src={product.imageUrl} alt={product.name} />
+                            <span className="min-w-0 truncate font-medium dark:text-white">
+                              {product.name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
+                          {product.brand}
+                        </td>
+                        <td className="px-5 py-3">
+                          <Badge>{product.subcategory || product.category}</Badge>
+                        </td>
+                        <td className="px-5 py-3">
+                          <Badge variant={product.isActive ? "success" : "default"}>
+                            {product.isActive ? t.active : t.inactive}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {data.products.length > PRODUCTS_PAGE_SIZE ? (
+                <TablePagination
+                  label={t.pagination
+                    .replace("{total}", String(data.products.length))
+                    .replace("{page}", String(safeProductsPage))
+                    .replace("{pageCount}", String(productsPageCount))}
+                  page={safeProductsPage}
+                  pageCount={productsPageCount}
+                  prevLabel={t.prev}
+                  nextLabel={t.next}
+                  onPrev={() => setProductsPage((p) => Math.max(1, p - 1))}
+                  onNext={() =>
+                    setProductsPage((p) => Math.min(productsPageCount, p + 1))
+                  }
+                />
+              ) : null}
+            </>
           )}
         </Card>
       ) : null}
@@ -483,40 +551,56 @@ export function AdminAffiliatorDetailClient() {
               {t.emptyLeads}
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[720px] text-left text-sm">
-                <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
-                  <tr>
-                    <th className="px-5 py-3 font-medium">{t.colGuest}</th>
-                    <th className="px-5 py-3 font-medium">{t.colSummary}</th>
-                    <th className="px-5 py-3 font-medium">{t.colDate}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.leads.map((lead) => (
-                    <tr
-                      key={lead.id}
-                      className="border-t border-neutral-200 dark:border-neutral-800"
-                    >
-                      <td className="px-5 py-3 font-medium dark:text-white">
-                        {lead.guestName || t.guest}
-                      </td>
-                      <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
-                        {lead.undertone} · {lead.faceShape}
-                        {lead.topProduct ? ` · ${lead.topProduct}` : ""}
-                      </td>
-                      <td className="px-5 py-3 text-neutral-500 dark:text-neutral-400">
-                        {new Date(lead.createdAt).toLocaleDateString(dateTag, {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </td>
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[720px] text-left text-sm">
+                  <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
+                    <tr>
+                      <th className="px-5 py-3 font-medium">{t.colGuest}</th>
+                      <th className="px-5 py-3 font-medium">{t.colSummary}</th>
+                      <th className="px-5 py-3 font-medium">{t.colDate}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {pagedLeads.map((lead) => (
+                      <tr
+                        key={lead.id}
+                        className="border-t border-neutral-200 dark:border-neutral-800"
+                      >
+                        <td className="px-5 py-3 font-medium dark:text-white">
+                          {lead.guestName || t.guest}
+                        </td>
+                        <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
+                          {lead.undertone} · {lead.faceShape}
+                          {lead.topProduct ? ` · ${lead.topProduct}` : ""}
+                        </td>
+                        <td className="px-5 py-3 text-neutral-500 dark:text-neutral-400">
+                          {new Date(lead.createdAt).toLocaleDateString(dateTag, {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {data.leads.length > LEADS_PAGE_SIZE ? (
+                <TablePagination
+                  label={t.pagination
+                    .replace("{total}", String(data.leads.length))
+                    .replace("{page}", String(safeLeadsPage))
+                    .replace("{pageCount}", String(leadsPageCount))}
+                  page={safeLeadsPage}
+                  pageCount={leadsPageCount}
+                  prevLabel={t.prev}
+                  nextLabel={t.next}
+                  onPrev={() => setLeadsPage((p) => Math.max(1, p - 1))}
+                  onNext={() => setLeadsPage((p) => Math.min(leadsPageCount, p + 1))}
+                />
+              ) : null}
+            </>
           )}
         </Card>
       ) : null}
@@ -580,64 +664,82 @@ export function AdminAffiliatorDetailClient() {
               {t.emptyInvoices}
             </p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[800px] text-left text-sm">
-                <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
-                  <tr>
-                    <th className="px-5 py-3 font-medium">{t.colInvoice}</th>
-                    <th className="px-5 py-3 font-medium">{t.colPlan}</th>
-                    <th className="px-5 py-3 font-medium">{t.colMethod}</th>
-                    <th className="px-5 py-3 font-medium">{t.colDate}</th>
-                    <th className="px-5 py-3 font-medium text-right">{t.colAmount}</th>
-                    <th className="px-5 py-3 font-medium text-right">{t.colActions}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.invoices.map((invoice) => (
-                    <tr
-                      key={invoice.id}
-                      className="border-t border-neutral-200 dark:border-neutral-800"
-                    >
-                      <td className="px-5 py-3 font-medium dark:text-white">
-                        {invoice.invoiceNumber}
-                      </td>
-                      <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
-                        {invoice.planName}
-                      </td>
-                      <td className="px-5 py-3 uppercase text-neutral-600 dark:text-neutral-300">
-                        {invoice.method}
-                      </td>
-                      <td className="px-5 py-3 text-neutral-500 dark:text-neutral-400">
-                        {new Date(
-                          invoice.paidAt ?? invoice.createdAt,
-                        ).toLocaleDateString(dateTag, {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </td>
-                      <td className="px-5 py-3 text-right font-medium dark:text-white">
-                        {formatIdr(invoice.total)}
-                      </td>
-                      <td className="px-5 py-3 text-right">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => {
-                            setSelectedInvoice(invoice);
-                            setPdfOpen(true);
-                          }}
-                        >
-                          <Printer className="h-3.5 w-3.5" />
-                          {t.print}
-                        </Button>
-                      </td>
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[800px] text-left text-sm">
+                  <thead className="bg-neutral-50 text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
+                    <tr>
+                      <th className="px-5 py-3 font-medium">{t.colInvoice}</th>
+                      <th className="px-5 py-3 font-medium">{t.colPlan}</th>
+                      <th className="px-5 py-3 font-medium">{t.colMethod}</th>
+                      <th className="px-5 py-3 font-medium">{t.colDate}</th>
+                      <th className="px-5 py-3 font-medium text-right">{t.colAmount}</th>
+                      <th className="px-5 py-3 font-medium text-right">{t.colActions}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {pagedInvoices.map((invoice) => (
+                      <tr
+                        key={invoice.id}
+                        className="border-t border-neutral-200 dark:border-neutral-800"
+                      >
+                        <td className="px-5 py-3 font-medium dark:text-white">
+                          {invoice.invoiceNumber}
+                        </td>
+                        <td className="px-5 py-3 text-neutral-600 dark:text-neutral-300">
+                          {invoice.planName}
+                        </td>
+                        <td className="px-5 py-3 uppercase text-neutral-600 dark:text-neutral-300">
+                          {invoice.method}
+                        </td>
+                        <td className="px-5 py-3 text-neutral-500 dark:text-neutral-400">
+                          {new Date(
+                            invoice.paidAt ?? invoice.createdAt,
+                          ).toLocaleDateString(dateTag, {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </td>
+                        <td className="px-5 py-3 text-right font-medium dark:text-white">
+                          {formatIdr(invoice.total)}
+                        </td>
+                        <td className="px-5 py-3 text-right">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => {
+                              setSelectedInvoice(invoice);
+                              setPdfOpen(true);
+                            }}
+                          >
+                            <Printer className="h-3.5 w-3.5" />
+                            {t.print}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {data.invoices.length > INVOICES_PAGE_SIZE ? (
+                <TablePagination
+                  label={t.pagination
+                    .replace("{total}", String(data.invoices.length))
+                    .replace("{page}", String(safeInvoicesPage))
+                    .replace("{pageCount}", String(invoicesPageCount))}
+                  page={safeInvoicesPage}
+                  pageCount={invoicesPageCount}
+                  prevLabel={t.prev}
+                  nextLabel={t.next}
+                  onPrev={() => setInvoicesPage((p) => Math.max(1, p - 1))}
+                  onNext={() =>
+                    setInvoicesPage((p) => Math.min(invoicesPageCount, p + 1))
+                  }
+                />
+              ) : null}
+            </>
           )}
         </Card>
       ) : null}
@@ -704,6 +806,50 @@ export function AdminAffiliatorDetailClient() {
           setSelectedInvoice(null);
         }}
       />
+    </div>
+  );
+}
+
+function TablePagination({
+  label,
+  page,
+  pageCount,
+  prevLabel,
+  nextLabel,
+  onPrev,
+  onNext,
+}: {
+  label: string;
+  page: number;
+  pageCount: number;
+  prevLabel: string;
+  nextLabel: string;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between border-t border-neutral-200 px-5 py-3 text-sm dark:border-neutral-800">
+      <p className="text-neutral-500 dark:text-neutral-400">{label}</p>
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          disabled={page <= 1}
+          onClick={onPrev}
+        >
+          {prevLabel}
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          disabled={page >= pageCount}
+          onClick={onNext}
+        >
+          {nextLabel}
+        </Button>
+      </div>
     </div>
   );
 }
