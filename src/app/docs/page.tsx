@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 import { Logo } from "@/components/brand/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { resolveApiUrl } from "@/lib/api-url";
 import { cn } from "@/lib/utils";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+const API_BASE = resolveApiUrl();
 
 type SectionId =
   | "intro"

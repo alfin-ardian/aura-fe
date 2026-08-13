@@ -3,9 +3,7 @@ import {
   getRefreshToken,
   setAuthTokens,
 } from "@/lib/auth-storage";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+import { API_URL } from "@/lib/api-url";
 
 interface RefreshResponse {
   success: boolean;

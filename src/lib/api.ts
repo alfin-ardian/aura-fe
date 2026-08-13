@@ -1,8 +1,8 @@
+import { API_URL } from "@/lib/api-url";
 import { getAccessToken } from "@/lib/auth-storage";
 import { isAccessTokenExpired, refreshSession } from "@/lib/auth-refresh";
 
-export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+export { API_URL, resolveApiUrl } from "@/lib/api-url";
 
 export class ApiError extends Error {
   constructor(
