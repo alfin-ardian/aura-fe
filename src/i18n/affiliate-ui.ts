@@ -218,11 +218,14 @@ type AffiliateUi = {
     active: string;
     buyAgain: string;
     choosePlan: string;
+    talkToUs: string;
+    customVolume: string;
     scansPerScan: string;
     noPlan: string;
     planDescStarter: string;
     planDescGrowth: string;
     planDescScale: string;
+    planDescCustom: string;
     chartScan: string;
     chartMatch: string;
   };
@@ -478,11 +481,15 @@ const en: AffiliateUi = {
     active: "Active",
     buyAgain: "Buy again",
     choosePlan: "Choose plan",
+    talkToUs: "Talk to us",
+    customVolume: "Custom volume · tailored SLA",
     scansPerScan: "{scans} scans · ~{perScan}/scan",
     noPlan: "No active plan",
     planDescStarter: "Good for trials and small audiences.",
     planDescGrowth: "Best value for partners active every week.",
     planDescScale: "For clinics, studios, and high-volume partners.",
+    planDescCustom:
+      "Largest package with tailored quota, branding, and integrations.",
     chartScan: "Scan",
     chartMatch: "Match",
   },
@@ -742,11 +749,15 @@ const id: AffiliateUi = {
     active: "Aktif",
     buyAgain: "Beli lagi",
     choosePlan: "Pilih paket",
+    talkToUs: "Talk to us",
+    customVolume: "Kuota custom · SLA disesuaikan",
     scansPerScan: "{scans} scan · ~{perScan}/scan",
     noPlan: "Belum berlangganan",
     planDescStarter: "Cocok untuk uji coba dan audiens kecil.",
     planDescGrowth: "Paling hemat untuk partner yang aktif setiap minggu.",
     planDescScale: "Untuk klinik, studio, dan partner volume tinggi.",
+    planDescCustom:
+      "Paket terbesar dengan kuota, branding, dan integrasi yang disesuaikan.",
     chartScan: "Scan",
     chartMatch: "Match",
   },
@@ -1003,11 +1014,15 @@ const ko: AffiliateUi = {
     active: "활성",
     buyAgain: "다시 구매",
     choosePlan: "플랜 선택",
+    talkToUs: "Talk to us",
+    customVolume: "맞춤 볼륨 · SLA 협의",
     scansPerScan: "스캔 {scans}회 · ~{perScan}/스캔",
     noPlan: "구독 없음",
     planDescStarter: "시험용 및 소규모 오디언스에 적합합니다.",
     planDescGrowth: "매주 활동하는 파트너에게 가장 경제적입니다.",
     planDescScale: "클리닉, 스튜디오, 대량 파트너용입니다.",
+    planDescCustom:
+      "쿼터·브랜딩·연동을 맞춤 설정하는 최대 규모 패키지입니다.",
     chartScan: "스캔",
     chartMatch: "매칭",
   },

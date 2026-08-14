@@ -7,7 +7,11 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { costPerScan, PRICING_PLANS } from "@/constants/pricing";
+import {
+  CONTACT_SALES_HREF,
+  costPerScan,
+  PRICING_PLANS,
+} from "@/constants/pricing";
 import { cn, formatIdr } from "@/lib/utils";
 import { authService } from "@/services/auth.service";
 import { usageService } from "@/services/usage.service";
@@ -50,7 +54,7 @@ export function PlansClient() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="mx-auto max-w-6xl space-y-8">
       <div className="text-center sm:text-left">
         <Badge>Langkah berikutnya</Badge>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight dark:text-white">
@@ -62,7 +66,7 @@ export function PlansClient() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {PRICING_PLANS.map((plan) => {
           const perScan = costPerScan(plan.priceIdr, plan.scans);
           return (
@@ -79,11 +83,19 @@ export function PlansClient() {
                   {plan.featured ? <Badge>Populer</Badge> : null}
                 </div>
                 <p className="text-2xl font-semibold tracking-tight dark:text-white">
-                  {formatIdr(plan.priceIdr)}
-                  <span className="text-sm font-normal text-neutral-500"> /bln</span>
+                  {plan.contactSales ? (
+                    "Talk to us"
+                  ) : (
+                    <>
+                      {formatIdr(plan.priceIdr)}
+                      <span className="text-sm font-normal text-neutral-500"> /bln</span>
+                    </>
+                  )}
                 </p>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                  {plan.scans.toLocaleString("id-ID")} scan · ~{formatIdr(perScan)}/scan
+                  {plan.contactSales
+                    ? "Kuota & SLA custom"
+                    : `${plan.scans.toLocaleString("id-ID")} scan · ~${formatIdr(perScan)}/scan`}
                 </p>
               </div>
               <p className="flex-1 text-sm text-neutral-600 dark:text-neutral-300">
@@ -95,13 +107,17 @@ export function PlansClient() {
                 ))}
               </ul>
               <Link
-                href={`/affiliate/checkout?plan=${plan.id}`}
+                href={
+                  plan.contactSales
+                    ? CONTACT_SALES_HREF
+                    : `/affiliate/checkout?plan=${plan.id}`
+                }
                 className={cn(
                   buttonVariants({ variant: plan.featured ? "primary" : "secondary" }),
                   "w-full justify-center rounded-full",
                 )}
               >
-                Pilih {plan.name}
+                {plan.contactSales ? "Talk to us" : `Pilih ${plan.name}`}
               </Link>
             </Card>
           );

@@ -8,7 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ErrorState } from "@/components/ui/error-state";
 import { ProgressBar } from "@/components/ui/progress-bar";
-import { costPerScan } from "@/constants/pricing";
+import { CONTACT_SALES_HREF, costPerScan } from "@/constants/pricing";
 import { localeDateTag, useAffiliateUi } from "@/i18n/affiliate-ui";
 import { useLocale } from "@/i18n/locale-provider";
 import { cn, formatIdr } from "@/lib/utils";
@@ -112,6 +112,7 @@ export function AffiliateUsageClient() {
     if (id === "starter") return ui.planDescStarter;
     if (id === "growth") return ui.planDescGrowth;
     if (id === "scale") return ui.planDescScale;
+    if (id === "custom") return ui.planDescCustom;
     return fallback;
   };
 
@@ -292,9 +293,10 @@ export function AffiliateUsageClient() {
             {ui.upgradeSubtitle}
           </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {usage.plans.map((plan) => {
             const perScan = costPerScan(plan.priceIdr, plan.scans);
+            const isContact = Boolean(plan.contactSales) || plan.id === "custom";
             return (
               <div
                 key={plan.id}
@@ -312,7 +314,7 @@ export function AffiliateUsageClient() {
                   ) : null}
                 </div>
                 <p className="mt-3 text-2xl font-semibold tracking-tight">
-                  {formatIdr(plan.priceIdr)}
+                  {isContact ? ui.talkToUs : formatIdr(plan.priceIdr)}
                 </p>
                 <p
                   className={cn(
@@ -320,9 +322,11 @@ export function AffiliateUsageClient() {
                     plan.featured ? "text-neutral-400" : "text-neutral-500",
                   )}
                 >
-                  {ui.scansPerScan
-                    .replace("{scans}", formatNumber(plan.scans))
-                    .replace("{perScan}", formatIdr(perScan))}
+                  {isContact
+                    ? ui.customVolume
+                    : ui.scansPerScan
+                        .replace("{scans}", formatNumber(plan.scans))
+                        .replace("{perScan}", formatIdr(perScan))}
                 </p>
                 <p
                   className={cn(
@@ -342,7 +346,11 @@ export function AffiliateUsageClient() {
                     </Badge>
                   ) : null}
                   <Link
-                    href={`/affiliate/checkout?plan=${plan.id}`}
+                    href={
+                      isContact
+                        ? CONTACT_SALES_HREF
+                        : `/affiliate/checkout?plan=${plan.id}`
+                    }
                     className={cn(
                       buttonVariants({
                         variant: plan.featured ? "secondary" : "primary",
@@ -354,7 +362,11 @@ export function AffiliateUsageClient() {
                       plan.active && !plan.featured && "ml-auto",
                     )}
                   >
-                    {plan.active ? ui.buyAgain : ui.choosePlan}
+                    {isContact
+                      ? ui.talkToUs
+                      : plan.active
+                        ? ui.buyAgain
+                        : ui.choosePlan}
                   </Link>
                 </div>
               </div>

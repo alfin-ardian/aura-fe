@@ -104,7 +104,7 @@ export function CheckoutClient({ planId }: { planId: string }) {
           <Card className="space-y-4">
             <h2 className="font-semibold">Paket kredit</h2>
             <div className="grid gap-3">
-              {PRICING_PLANS.map((item) => (
+              {PRICING_PLANS.filter((item) => !item.contactSales).map((item) => (
                 <label
                   key={item.id}
                   className={cn(

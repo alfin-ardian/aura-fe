@@ -1,6 +1,6 @@
 import { apiFetch } from "@/lib/api";
 
-export type UsagePlanId = "starter" | "growth" | "scale";
+export type UsagePlanId = "starter" | "growth" | "scale" | "custom";
 export type PaymentMethodId = "qris" | "va" | "ewallet";
 
 export interface UsagePlan {
@@ -9,6 +9,7 @@ export interface UsagePlan {
   priceIdr: number;
   scans: number;
   featured: boolean;
+  contactSales?: boolean;
   description: string;
   active: boolean;
 }

@@ -74,6 +74,8 @@ export type Messages = {
     mostPopular: string;
     perScan: string;
     getStarted: string;
+    talkToUs: string;
+    customVolume: string;
     footnote: string;
     features: Record<string, string[]>;
   };
@@ -352,6 +354,8 @@ const en: Messages = {
     mostPopular: "Most Popular",
     perScan: "/scan",
     getStarted: "Get started",
+    talkToUs: "Talk to us",
+    customVolume: "Custom volume · tailored SLA",
     footnote: "The more you grow, the lower your cost per scan.",
     features: {
       starter: [
@@ -371,6 +375,12 @@ const en: Messages = {
         "Valid for 30 days",
         "Full analytics suite",
         "Priority support",
+      ],
+      custom: [
+        "Scan volume tailored to you",
+        "Custom branding & white-label options",
+        "Dedicated success manager",
+        "Custom API / SLA & onboarding",
       ],
     },
   },
@@ -747,6 +757,8 @@ const id: Messages = {
     mostPopular: "Paling Populer",
     perScan: "/scan",
     getStarted: "Mulai",
+    talkToUs: "Talk to us",
+    customVolume: "Kuota custom · SLA disesuaikan",
     footnote: "Semakin besar paket Anda, semakin hemat biaya per scan.",
     features: {
       starter: [
@@ -766,6 +778,12 @@ const id: Messages = {
         "Berlaku 30 hari",
         "Suite analitik lengkap",
         "Dukungan prioritas",
+      ],
+      custom: [
+        "Kuota scan sesuai kebutuhan",
+        "Custom branding & white-label",
+        "Dedicated success manager",
+        "Custom API / SLA & onboarding",
       ],
     },
   },

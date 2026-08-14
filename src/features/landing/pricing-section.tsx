@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { costPerScan, PRICING_PLANS } from "@/constants/pricing";
+import {
+  CONTACT_SALES_HREF,
+  costPerScan,
+  PRICING_PLANS,
+} from "@/constants/pricing";
 import { useLocale } from "@/i18n/locale-provider";
 import { cn, formatIdr } from "@/lib/utils";
 
@@ -15,7 +19,7 @@ export function PricingSection() {
       aria-labelledby="pricing-heading"
       className="scroll-mt-24 border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
     >
-      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium text-neutral-400">
             {t.pricing.eyebrow}
@@ -31,10 +35,13 @@ export function PricingSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PRICING_PLANS.map((plan) => {
             const perScan = costPerScan(plan.priceIdr, plan.scans);
             const features = t.pricing.features[plan.id] ?? [...plan.features];
+            const href = plan.contactSales
+              ? CONTACT_SALES_HREF
+              : `/login?next=${encodeURIComponent(`/affiliate/checkout?plan=${plan.id}`)}`;
             return (
               <article
                 key={plan.id}
@@ -59,7 +66,9 @@ export function PricingSection() {
                   {plan.name}
                 </p>
                 <p className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
-                  {formatIdr(plan.priceIdr)}
+                  {plan.contactSales
+                    ? t.pricing.talkToUs
+                    : formatIdr(plan.priceIdr)}
                 </p>
                 <p
                   className={cn(
@@ -67,9 +76,9 @@ export function PricingSection() {
                     plan.featured ? "text-neutral-400" : "text-neutral-500",
                   )}
                 >
-                  {plan.scans.toLocaleString("id-ID")} scan · ~
-                  {formatIdr(perScan)}
-                  {t.pricing.perScan}
+                  {plan.contactSales
+                    ? t.pricing.customVolume
+                    : `${plan.scans.toLocaleString("id-ID")} scan · ~${formatIdr(perScan)}${t.pricing.perScan}`}
                 </p>
                 <ul
                   className={cn(
@@ -82,7 +91,7 @@ export function PricingSection() {
                   ))}
                 </ul>
                 <Link
-                  href={`/login?next=${encodeURIComponent(`/affiliate/checkout?plan=${plan.id}`)}`}
+                  href={href}
                   className={cn(
                     buttonVariants({
                       variant: plan.featured ? "secondary" : "primary",
@@ -92,7 +101,7 @@ export function PricingSection() {
                       "border-transparent bg-white text-black hover:bg-neutral-200",
                   )}
                 >
-                  {t.pricing.getStarted}
+                  {plan.contactSales ? t.pricing.talkToUs : t.pricing.getStarted}
                 </Link>
               </article>
             );

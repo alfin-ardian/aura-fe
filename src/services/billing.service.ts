@@ -41,6 +41,7 @@ export interface BillingOverview {
     priceIdr: number;
     scans: number;
     featured: boolean;
+    contactSales?: boolean;
     description: string;
     active: boolean;
   }>;
